@@ -1,0 +1,12 @@
+# Compute 서비스 변수 값 (Production 예제)
+project_name = "<your-project-name>"
+aws_region   = "ap-northeast-2"
+environment  = "prod"
+
+# EC2 설정 (예제 값)
+instance_type    = "t3.medium"
+min_size         = 3
+max_size         = 10
+desired_capacity = 3
+remote_state_bucket = "<your-tfstate-bucket>"
+

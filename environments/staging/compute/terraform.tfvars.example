@@ -1,0 +1,12 @@
+# Compute 서비스 변수 값 (Staging 예제)
+project_name = "<your-project-name>"
+aws_region   = "ap-northeast-2"
+environment  = "staging"
+
+# EC2 설정 (예제 값)
+instance_type    = "t3.small"
+min_size         = 2
+max_size         = 4
+desired_capacity = 2
+remote_state_bucket = "<your-tfstate-bucket>"
+
