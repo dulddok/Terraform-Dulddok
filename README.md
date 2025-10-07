@@ -187,12 +187,7 @@ desired_capacity = 1
 - [AWS Provider 문서](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Terraform 모범 사례](https://www.terraform.io/docs/cloud/guides/recommended-practices/)
 
-## 🤝 기여하기
-
-1. 이슈 생성 또는 기존 이슈 확인
-2. 기능 브랜치 생성
-3. 변경사항 커밋
-4. Pull Request 생성
+<!-- ETC -->
 
 ## 📄 라이선스
 
