@@ -181,6 +181,17 @@ desired_capacity = 1
 3. 각 서비스별로 `main.tf`, `variables.tf`, `outputs.tf`, `terraform.tfvars` 파일 작성
 4. 서비스 간 의존성은 `terraform_remote_state` 데이터 소스로 관리
 
+## 🌿 Git 브랜치 전략
+
+### 간단한 브랜치 전략 (개인 프로젝트용)
+- **`main`**: 프로덕션 환경 (안정적인 코드)
+- **`develop`**: 개발 환경 (실험/테스트용)
+
+### 워크플로우
+1. `develop` 브랜치에서 개발 및 테스트
+2. 안정화되면 `main` 브랜치로 머지
+3. 태그로 버전 관리
+
 ## 📚 참고 자료
 
 - [Terraform 공식 문서](https://www.terraform.io/docs/)
