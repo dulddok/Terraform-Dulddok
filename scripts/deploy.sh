@@ -55,12 +55,26 @@ case $ACTION in
         terraform plan -var-file="terraform.tfvars"
         ;;
     apply)
-        echo "Terraform 적용 중..."
-        terraform apply -var-file="terraform.tfvars" -auto-approve
+        echo "Terraform 계획 생성 중..."
+        terraform plan -var-file="terraform.tfvars"
+        echo ""
+        echo "경고: $SERVICE 서비스의 인프라를 배포하려고 합니다!"
+        read -p "위 계획을 적용하시겠습니까? (yes/no): " confirm
+        if [ "$confirm" = "yes" ]; then
+            terraform apply -var-file="terraform.tfvars" -auto-approve
+        else
+            echo "배포가 취소되었습니다."
+        fi
         ;;
     destroy)
+        echo "현재 상태 확인 중..."
+        terraform show -no-color
+        echo ""
+        echo "삭제 계획 생성 중..."
+        terraform plan -destroy -var-file="terraform.tfvars"
+        echo ""
         echo "경고: $SERVICE 서비스의 인프라를 삭제하려고 합니다!"
-        read -p "정말로 삭제하시겠습니까? (yes/no): " confirm
+        read -p "위 계획을 적용하여 삭제하시겠습니까? (yes/no): " confirm
         if [ "$confirm" = "yes" ]; then
             terraform destroy -var-file="terraform.tfvars" -auto-approve
         else
