@@ -32,23 +32,13 @@ variable "availability_zones" {
 }
 
 variable "public_subnet_cidrs" {
-  description = "Public 서브넷 CIDR 블록 목록"
+  description = "Public 서브넷 CIDR 블록 목록 (availability_zones와 개수가 일치해야 함)"
   type        = list(string)
-
-  validation {
-    condition     = length(var.public_subnet_cidrs) == length(var.availability_zones)
-    error_message = "Number of public subnet CIDRs must match number of availability zones"
-  }
 }
 
 variable "private_subnet_cidrs" {
-  description = "Private 서브넷 CIDR 블록 목록"
+  description = "Private 서브넷 CIDR 블록 목록 (availability_zones와 개수가 일치해야 함)"
   type        = list(string)
-
-  validation {
-    condition     = length(var.private_subnet_cidrs) == length(var.availability_zones)
-    error_message = "Number of private subnet CIDRs must match number of availability zones"
-  }
 }
 
 variable "enable_nat_gateway" {

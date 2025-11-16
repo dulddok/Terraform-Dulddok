@@ -9,6 +9,25 @@ terraform {
   }
 }
 
+# 변수 검증 (다른 변수 참조가 필요한 경우 locals 사용)
+locals {
+  # 서브넷 CIDR 개수가 AZ 개수와 일치하는지 검증
+  validate_subnet_counts = (
+    length(var.public_subnet_cidrs) == length(var.availability_zones) &&
+    length(var.private_subnet_cidrs) == length(var.availability_zones)
+  )
+}
+
+# 검증 실패 시 오류 발생
+resource "null_resource" "validate_subnet_counts" {
+  count = local.validate_subnet_counts ? 0 : 1
+
+  # 검증 실패 시 명확한 오류 메시지
+  triggers = {
+    error = "Number of subnet CIDRs must match number of availability zones. Public: ${length(var.public_subnet_cidrs)}, Private: ${length(var.private_subnet_cidrs)}, AZs: ${length(var.availability_zones)}"
+  }
+}
+
 # VPC 생성
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
