@@ -51,9 +51,9 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     needs: terraform-validate
-    # PR에서는 AWS 자격 증명이 없으므로 완전히 스킵
-    # main/master 브랜치에 직접 push할 때만 실행 (PR 병합 후)
-    if: github.event_name != 'pull_request' && github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    # PR에서만 실행 (develop 브랜치 push에서는 스킵)
+    # GitHub Secrets에 AWS 자격 증명이 설정되어 있어야 함
+    if: github.event_name == 'pull_request'
     
     strategy:
       matrix:
@@ -69,25 +69,39 @@ jobs:
         terraform_version: ${{ env.TF_VERSION }}
 
     - name: Configure AWS credentials
+      id: aws-credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
+      continue-on-error: true
 
     - name: Terraform Init
+      if: steps.aws-credentials.outcome == 'success'
       run: terraform init
-      working-directory: environments/${{ matrix.environment }}
+      working-directory: environments/${{ matrix.environment }}/networking
 
     - name: Terraform Plan
+      if: steps.aws-credentials.outcome == 'success'
       run: terraform plan -var-file="terraform.tfvars" -out=tfplan
-      working-directory: environments/${{ matrix.environment }}
+      working-directory: environments/${{ matrix.environment }}/networking
 
     - name: Upload Plan
+      if: steps.aws-credentials.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: terraform-plan-${{ matrix.environment }}
-        path: environments/${{ matrix.environment }}/tfplan
+        path: environments/${{ matrix.environment }}/networking/tfplan
+
+    - name: Skip message if no credentials
+      if: steps.aws-credentials.outcome == 'failure'
+      run: |
+        echo "⚠️ AWS credentials not available. Skipping terraform plan."
+        echo "To enable terraform plan in PRs, configure GitHub Secrets:"
+        echo "  - AWS_ACCESS_KEY_ID"
+        echo "  - AWS_SECRET_ACCESS_KEY"
+        echo "See docs/GITHUB_SECRETS_SETUP.md for details."
 
   terraform-apply:
     name: Terraform Apply
