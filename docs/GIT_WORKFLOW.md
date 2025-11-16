@@ -94,12 +94,73 @@ git push origin master
 git checkout develop
 ```
 
+## GitHub 브랜치 보호 규칙 설정
+
+### 브랜치 보호 규칙이란?
+
+GitHub에서 master 브랜치를 보호하여 실수로 삭제하거나 force push하는 것을 방지하는 기능입니다.
+
+### 설정 방법
+
+1. **GitHub 저장소로 이동**
+   - 저장소 페이지 → Settings → Branches
+
+2. **브랜치 보호 규칙 추가**
+   - "Add rule" 또는 "Add branch protection rule" 클릭
+   - Branch name pattern: `master` 입력
+
+3. **권장 설정**
+
+   ✅ **필수 설정**:
+   - ☑️ Require a pull request before merging
+     - Require approvals: 1 (또는 팀 규모에 맞게)
+   - ☑️ Require status checks to pass before merging
+     - terraform fmt, terraform validate 등
+   - ☑️ Require branches to be up to date before merging
+   - ☑️ Do not allow bypassing the above settings
+
+   ✅ **추가 보안 설정**:
+   - ☑️ Restrict who can push to matching branches
+   - ☑️ Allow force pushes: ❌ (비활성화)
+   - ☑️ Allow deletions: ❌ (비활성화)
+
+4. **저장**
+   - "Create" 또는 "Save changes" 클릭
+
+### 설정 후 효과
+
+- ✅ master 브랜치에 직접 push 불가 (Pull Request 필수)
+- ✅ force push 방지
+- ✅ 브랜치 삭제 방지
+- ✅ 코드 리뷰 필수
+- ✅ CI/CD 검증 통과 필수
+
+### 개발 워크플로우 (보호 규칙 적용 후)
+
+```bash
+# 1. develop 브랜치에서 작업
+git checkout develop
+git add .
+git commit -m "feat: 새로운 기능"
+git push origin develop
+
+# 2. GitHub에서 Pull Request 생성
+# develop → master로 PR 생성
+
+# 3. 코드 리뷰 및 승인
+
+# 4. CI/CD 검증 통과
+
+# 5. PR 병합 (GitHub에서)
+```
+
 ## 주의사항
 
 1. **항상 최신화**: master로 전환하기 전에 `git pull` 실행
 2. **충돌 해결**: 병합 시 충돌이 발생하면 신중하게 해결
 3. **테스트**: master에 병합하기 전에 충분히 테스트
 4. **커밋 메시지**: Conventional Commits 규칙 준수
+5. **브랜치 보호**: master 브랜치는 보호 규칙 설정 권장
 
 ## 유용한 명령어
 
