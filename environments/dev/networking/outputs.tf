@@ -50,3 +50,13 @@ output "private_route_table_ids" {
   value       = module.vpc.private_route_table_ids
 }
 
+output "private_subnet_availability_zones" {
+  description = "Private 서브넷의 가용 영역 목록"
+  value       = module.vpc.private_subnet_availability_zones
+}
+
+output "availability_zones" {
+  description = "사용된 가용 영역 목록"
+  value       = module.vpc.availability_zones
+}
+

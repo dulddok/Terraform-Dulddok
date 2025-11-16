@@ -43,3 +43,6 @@ environments/**/backend.hcl
 # Terraform 변수 파일(실값 비커밋)
 *.tfvars
 *.auto.tfvars
+
+# 로컬 문서 파일 
+IMPROVEMENTS.md

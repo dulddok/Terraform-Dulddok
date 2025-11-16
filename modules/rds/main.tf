@@ -64,8 +64,8 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name   = aws_db_subnet_group.main.name
 
   backup_retention_period = var.backup_retention_period
-  backup_window          = var.backup_window
-  maintenance_window     = var.maintenance_window
+  backup_window           = var.backup_window
+  maintenance_window      = var.maintenance_window
 
   skip_final_snapshot = var.skip_final_snapshot
   deletion_protection = var.deletion_protection

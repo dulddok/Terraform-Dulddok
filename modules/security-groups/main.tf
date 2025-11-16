@@ -12,7 +12,7 @@ terraform {
 # 웹 서버 보안 그룹
 resource "aws_security_group" "web" {
   count = var.create_web_sg ? 1 : 0
-  
+
   name_prefix = "${var.project_name}-${var.environment}-web-"
   vpc_id      = var.vpc_id
 
@@ -59,7 +59,7 @@ resource "aws_security_group" "web" {
 # 데이터베이스 보안 그룹
 resource "aws_security_group" "database" {
   count = var.create_db_sg ? 1 : 0
-  
+
   name_prefix = "${var.project_name}-${var.environment}-db-"
   vpc_id      = var.vpc_id
 
@@ -87,7 +87,7 @@ resource "aws_security_group" "database" {
 # Redis 보안 그룹
 resource "aws_security_group" "redis" {
   count = var.create_redis_sg ? 1 : 0
-  
+
   name_prefix = "${var.project_name}-${var.environment}-redis-"
   vpc_id      = var.vpc_id
 
@@ -115,7 +115,7 @@ resource "aws_security_group" "redis" {
 # ALB 보안 그룹
 resource "aws_security_group" "alb" {
   count = var.create_alb_sg ? 1 : 0
-  
+
   name_prefix = "${var.project_name}-${var.environment}-alb-"
   vpc_id      = var.vpc_id
 

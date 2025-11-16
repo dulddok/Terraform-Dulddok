@@ -10,7 +10,9 @@
 │   │   ├── networking/    # 네트워킹 서비스 (VPC, 서브넷 등)
 │   │   ├── compute/       # 컴퓨팅 서비스 (EC2, Auto Scaling 등)
 │   │   ├── database/      # 데이터베이스 서비스 (RDS 등)
-│   │   └── storage/       # 스토리지 서비스 (S3 등)
+│   │   ├── storage/       # 스토리지 서비스 (S3 등)
+│   │   ├── privatelink/   # PrivateLink 서비스 제공자
+│   │   └── privatelink-consumer/ # PrivateLink 서비스 소비자
 │   ├── staging/           # 스테이징 환경
 │   │   ├── networking/
 │   │   ├── compute/
@@ -27,7 +29,11 @@
 │   ├── rds/               # RDS 모듈
 │   ├── s3/                # S3 모듈
 │   ├── iam/               # IAM 모듈
-│   └── security-groups/   # 보안 그룹 모듈
+│   ├── security-groups/   # 보안 그룹 모듈
+│   ├── nlb/               # Network Load Balancer 모듈
+│   ├── privatelink-service/ # PrivateLink 서비스 모듈
+│   ├── vpc-endpoint/      # VPC Endpoint 모듈
+│   └── route53-private-zone/ # Route53 Private Hosted Zone 모듈
 ├── scripts/               # 유틸리티 스크립트
 ├── docs/                  # 문서
 └── .github/workflows/     # GitHub Actions
@@ -109,6 +115,15 @@
 - Launch Template 설정
 - Security Group 관리
 - Key Pair 생성/관리
+
+### PrivateLink 관련 모듈
+- **NLB 모듈**: Network Load Balancer 생성 (PrivateLink 서비스 제공용)
+- **PrivateLink Service 모듈**: VPC Endpoint Service 생성
+- **VPC Endpoint 모듈**: Interface 타입 VPC Endpoint 생성
+- **Route53 Private Zone 모듈**: VPC 내부 DNS 설정
+
+### PrivateLink 설정 가이드
+자세한 설정 방법은 [PrivateLink 설정 가이드](./docs/PRIVATELINK_SETUP.md)를 참조하세요.
 
 ## 🔧 환경별 설정
 
