@@ -76,15 +76,15 @@ resource "aws_security_group" "vpce" {
 module "vpc_endpoint" {
   source = "../../../../modules/vpc-endpoint"
 
-  project_name      = var.project_name
-  environment       = var.environment
-  endpoint_name     = "privatelink-service"
-  vpc_id            = data.terraform_remote_state.networking.outputs.vpc_id
-  service_name      = data.terraform_remote_state.privatelink.outputs.vpc_endpoint_service_name
-  subnet_ids        = data.terraform_remote_state.networking.outputs.private_subnet_ids
-  security_group_ids = [aws_security_group.vpce.id]
+  project_name        = var.project_name
+  environment         = var.environment
+  endpoint_name       = "privatelink-service"
+  vpc_id              = data.terraform_remote_state.networking.outputs.vpc_id
+  service_name        = data.terraform_remote_state.privatelink.outputs.vpc_endpoint_service_name
+  subnet_ids          = data.terraform_remote_state.networking.outputs.private_subnet_ids
+  security_group_ids  = [aws_security_group.vpce.id]
   private_dns_enabled = true
-  auto_accept        = var.auto_accept
+  auto_accept         = var.auto_accept
 
   tags = {
     Environment = var.environment
@@ -113,14 +113,14 @@ module "route53_private_zone" {
   # VPC Endpoint의 DNS 엔트리를 AZ별로 매핑하여 DNS 레코드 생성
   # 각 AZ의 인스턴스가 같은 AZ의 ENI를 사용하도록 최적화
   dns_records = var.use_az_local_dns ? {
-    for idx, az in data.aws_subnet.private_subnets[*].availability_zone : 
+    for idx, az in data.aws_subnet.private_subnets[*].availability_zone :
     # AZ별로 별도의 DNS 레코드 생성 (예: service-az1.privatelink.local)
     "service-${replace(az, "-", "")}" => {
       name    = "${var.dns_service_name}-${replace(az, "-", "")}"
       type    = "A"
       records = [module.vpc_endpoint.vpc_endpoint_dns_entries[idx].dns_name]
     }
-  } : {
+    } : {
     # 기본 설정: 모든 AZ의 ENI를 하나의 레코드에 포함
     # (클라이언트가 자동으로 가까운 ENI 선택, 하지만 Cross-AZ 트래픽 가능)
     "service" = {

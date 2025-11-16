@@ -35,7 +35,7 @@ output "dns_service_names" {
   value = var.use_az_local_dns ? {
     for idx, az in data.aws_subnet.private_subnets[*].availability_zone :
     az => "${var.dns_service_name}-${replace(az, "-", "")}"
-  } : {
+    } : {
     "default" = var.dns_service_name
   }
 }

@@ -16,7 +16,7 @@ resource "aws_lb" "nlb" {
   load_balancer_type = "network"
   subnets            = var.subnet_ids
 
-  enable_deletion_protection = var.enable_deletion_protection
+  enable_deletion_protection       = var.enable_deletion_protection
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
 
   tags = merge(var.tags, {

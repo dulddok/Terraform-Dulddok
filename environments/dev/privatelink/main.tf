@@ -110,15 +110,15 @@ resource "aws_security_group" "service_ec2" {
 module "nlb" {
   source = "../../../../modules/nlb"
 
-  project_name   = var.project_name
-  environment    = var.environment
-  vpc_id         = data.terraform_remote_state.networking.outputs.vpc_id
-  subnet_ids     = data.terraform_remote_state.networking.outputs.private_subnet_ids
-  internal       = true
-  listener_port  = 80
+  project_name      = var.project_name
+  environment       = var.environment
+  vpc_id            = data.terraform_remote_state.networking.outputs.vpc_id
+  subnet_ids        = data.terraform_remote_state.networking.outputs.private_subnet_ids
+  internal          = true
+  listener_port     = 80
   listener_protocol = "TCP"
-  target_port    = 80
-  target_protocol = "TCP"
+  target_port       = 80
+  target_protocol   = "TCP"
 
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
 
@@ -136,7 +136,7 @@ resource "aws_instance" "service_instances" {
   ami           = var.ami_id != "" ? var.ami_id : data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
   subnet_id     = data.terraform_remote_state.networking.outputs.private_subnet_ids[count.index]
-  
+
   vpc_security_group_ids = [aws_security_group.service_ec2.id]
 
   user_data = <<-EOF
@@ -193,8 +193,8 @@ module "privatelink_service" {
   environment                = var.environment
   network_load_balancer_arns = [module.nlb.nlb_arn]
   acceptance_required        = var.acceptance_required
-  allowed_principals          = var.allowed_principals
-  auto_accept_principals      = var.auto_accept_principals
+  allowed_principals         = var.allowed_principals
+  auto_accept_principals     = var.auto_accept_principals
 
   tags = {
     Environment = var.environment
