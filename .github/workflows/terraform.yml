@@ -69,39 +69,25 @@ jobs:
         terraform_version: ${{ env.TF_VERSION }}
 
     - name: Configure AWS credentials
-      id: aws-credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-      continue-on-error: true
 
     - name: Terraform Init
-      if: steps.aws-credentials.outcome == 'success'
       run: terraform init
       working-directory: environments/${{ matrix.environment }}/networking
 
     - name: Terraform Plan
-      if: steps.aws-credentials.outcome == 'success'
       run: terraform plan -var-file="terraform.tfvars" -out=tfplan
       working-directory: environments/${{ matrix.environment }}/networking
 
     - name: Upload Plan
-      if: steps.aws-credentials.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: terraform-plan-${{ matrix.environment }}
         path: environments/${{ matrix.environment }}/networking/tfplan
-
-    - name: Skip message if no credentials
-      if: steps.aws-credentials.outcome == 'failure'
-      run: |
-        echo "⚠️ AWS credentials not available. Skipping terraform plan."
-        echo "To enable terraform plan in PRs, configure GitHub Secrets:"
-        echo "  - AWS_ACCESS_KEY_ID"
-        echo "  - AWS_SECRET_ACCESS_KEY"
-        echo "See docs/GITHUB_SECRETS_SETUP.md for details."
 
   terraform-apply:
     name: Terraform Apply
