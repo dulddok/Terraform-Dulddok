@@ -8,12 +8,22 @@ variable "project_name" {
 variable "environment" {
   description = "환경 (dev, staging, prod)"
   type        = string
+
+  validation {
+    condition     = contains(["dev", "staging", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, staging, prod"
+  }
 }
 
 variable "vpc_cidr" {
   description = "VPC CIDR 블록"
   type        = string
   default     = "10.0.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.vpc_cidr, 0))
+    error_message = "VPC CIDR must be a valid CIDR block (e.g., 10.0.0.0/16)"
+  }
 }
 
 variable "availability_zones" {
@@ -24,11 +34,21 @@ variable "availability_zones" {
 variable "public_subnet_cidrs" {
   description = "Public 서브넷 CIDR 블록 목록"
   type        = list(string)
+
+  validation {
+    condition     = length(var.public_subnet_cidrs) == length(var.availability_zones)
+    error_message = "Number of public subnet CIDRs must match number of availability zones"
+  }
 }
 
 variable "private_subnet_cidrs" {
   description = "Private 서브넷 CIDR 블록 목록"
   type        = list(string)
+
+  validation {
+    condition     = length(var.private_subnet_cidrs) == length(var.availability_zones)
+    error_message = "Number of private subnet CIDRs must match number of availability zones"
+  }
 }
 
 variable "enable_nat_gateway" {

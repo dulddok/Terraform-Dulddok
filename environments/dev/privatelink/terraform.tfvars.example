@@ -1,0 +1,26 @@
+project_name = "my-project"
+aws_region   = "ap-northeast-2"
+environment  = "dev"
+
+# 백엔드 설정 (실제 값으로 교체 필요)
+backend_config = {
+  bucket         = "my-terraform-state-bucket"
+  networking_key = "environments/dev/networking/terraform.tfstate"
+  dynamodb_table = "terraform-state-lock"
+}
+
+# EC2 설정
+instance_type = "t3.micro"
+
+# PrivateLink 설정
+acceptance_required = false  # true로 설정하면 연결 승인 필요
+allowed_principals  = []      # 허용된 계정 ARN 목록
+auto_accept_principals = []   # 자동 승인할 계정 ARN 목록
+
+# Cross-AZ 로드 밸런싱 (비용 테스트용)
+enable_cross_zone_load_balancing = true
+
+# DNS 설정
+dns_zone_name    = "privatelink.local"
+dns_service_name = "service.privatelink.local"
+

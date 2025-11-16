@@ -54,6 +54,12 @@ plan-prod-networking: ## prod 환경 networking 계획
 plan-prod-compute: ## prod 환경 compute 계획
 	./scripts/deploy.sh prod compute plan
 
+plan-dev-privatelink: ## dev 환경 privatelink 계획
+	./scripts/deploy.sh dev privatelink plan
+
+plan-dev-privatelink-consumer: ## dev 환경 privatelink-consumer 계획
+	./scripts/deploy.sh dev privatelink-consumer plan
+
 # 배포
 deploy-dev-networking: ## dev 환경 networking 배포
 	./scripts/deploy.sh dev networking apply
@@ -73,8 +79,14 @@ deploy-prod-networking: ## prod 환경 networking 배포
 deploy-prod-compute: ## prod 환경 compute 배포
 	./scripts/deploy.sh prod compute apply
 
+deploy-dev-privatelink: ## dev 환경 privatelink 배포
+	./scripts/deploy.sh dev privatelink apply
+
+deploy-dev-privatelink-consumer: ## dev 환경 privatelink-consumer 배포
+	./scripts/deploy.sh dev privatelink-consumer apply
+
 # 전체 배포 (순서대로)
-deploy-dev: deploy-dev-networking deploy-dev-compute ## dev 환경 전체 배포
+deploy-dev: deploy-dev-networking deploy-dev-compute deploy-dev-privatelink deploy-dev-privatelink-consumer ## dev 환경 전체 배포
 
 deploy-staging: deploy-staging-networking deploy-staging-compute ## staging 환경 전체 배포
 
@@ -98,6 +110,12 @@ destroy-prod-networking: ## prod 환경 networking 삭제
 
 destroy-prod-compute: ## prod 환경 compute 삭제
 	./scripts/deploy.sh prod compute destroy
+
+destroy-dev-privatelink: ## dev 환경 privatelink 삭제
+	./scripts/deploy.sh dev privatelink destroy
+
+destroy-dev-privatelink-consumer: ## dev 환경 privatelink-consumer 삭제
+	./scripts/deploy.sh dev privatelink-consumer destroy
 
 # 정리
 clean: ## .terraform 디렉터리 정리

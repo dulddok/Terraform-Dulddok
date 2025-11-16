@@ -1,0 +1,27 @@
+project_name = "my-project"
+aws_region   = "ap-northeast-2"
+environment  = "dev"
+
+# 백엔드 설정 (실제 값으로 교체 필요)
+backend_config = {
+  bucket          = "my-terraform-state-bucket"
+  networking_key  = "environments/dev/networking/terraform.tfstate"
+  privatelink_key = "environments/dev/privatelink/terraform.tfstate"
+  dynamodb_table  = "terraform-state-lock"
+}
+
+# EC2 설정
+instance_type = "t3.micro"
+
+# VPC Endpoint 설정
+auto_accept = false  # PrivateLink 서비스에서 acceptance_required=true인 경우 수동 승인 필요
+
+# DNS 설정 (PrivateLink 서비스와 동일하게 설정)
+dns_zone_name    = "privatelink.local"
+dns_service_name = "service.privatelink.local"
+
+# AZ별 로컬 DNS 사용 (비용 최적화)
+# true: 각 AZ별로 별도의 DNS 레코드 생성하여 같은 AZ의 ENI 사용 (Cross-AZ 비용 없음)
+# false: 모든 AZ의 ENI를 하나의 레코드에 포함 (Cross-AZ 트래픽 가능하지만 간편)
+use_az_local_dns = true
+

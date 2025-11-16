@@ -49,3 +49,18 @@ output "private_route_table_ids" {
   description = "Private Route Table ID 목록"
   value       = aws_route_table.private[*].id
 }
+
+output "public_subnet_availability_zones" {
+  description = "Public 서브넷의 가용 영역 목록"
+  value       = aws_subnet.public[*].availability_zone
+}
+
+output "private_subnet_availability_zones" {
+  description = "Private 서브넷의 가용 영역 목록"
+  value       = aws_subnet.private[*].availability_zone
+}
+
+output "availability_zones" {
+  description = "사용된 가용 영역 목록"
+  value       = var.availability_zones
+}
