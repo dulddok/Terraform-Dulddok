@@ -51,8 +51,9 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     needs: terraform-validate
-    # PR에서는 AWS 자격 증명이 없으므로 스킵 (push 이벤트에서만 실행, develop 브랜치 제외)
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    # PR에서는 AWS 자격 증명이 없으므로 완전히 스킵
+    # main/master 브랜치에 직접 push할 때만 실행 (PR 병합 후)
+    if: github.event_name != 'pull_request' && github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     
     strategy:
       matrix:
