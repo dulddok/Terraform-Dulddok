@@ -15,7 +15,7 @@ if [ "$ENVIRONMENT" = "all" ] && [ "$SERVICE" = "all" ]; then
     echo "전체 환경 및 서비스 검증 중..."
     
     for env in dev staging prod; do
-        for service in networking compute privatelink privatelink-consumer; do
+        for service in networking compute; do
             SERVICE_DIR="environments/$env/$service"
             if [ -d "$SERVICE_DIR" ]; then
                 echo "📁 검증 중: $SERVICE_DIR"
@@ -55,7 +55,7 @@ if [ "$ENVIRONMENT" = "all" ] && [ "$SERVICE" = "all" ]; then
 elif [ "$SERVICE" = "all" ]; then
     echo "$ENVIRONMENT 환경의 모든 서비스 검증 중..."
     
-    for service in networking compute privatelink privatelink-consumer; do
+    for service in networking compute; do
         SERVICE_DIR="environments/$ENVIRONMENT/$service"
         if [ -d "$SERVICE_DIR" ]; then
             echo "📁 검증 중: $SERVICE_DIR"

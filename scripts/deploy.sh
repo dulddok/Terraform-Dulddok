@@ -7,6 +7,11 @@
 
 set -e
 
+# 스크립트가 있는 디렉터리에서 프로젝트 루트로 이동
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
+
 ENVIRONMENT=$1
 SERVICE=$2
 ACTION=$3
@@ -42,7 +47,11 @@ cd "$SERVICE_DIR"
 
 # Terraform 초기화
 echo "Terraform 초기화 중..."
-terraform init
+if [ -f "backend.hcl" ]; then
+    terraform init -backend-config=backend.hcl
+else
+    terraform init
+fi
 
 # Terraform 검증
 echo "Terraform 검증 중..."
