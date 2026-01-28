@@ -21,12 +21,13 @@ echo "DynamoDB 테이블 이름: $DYNAMODB_TABLE"
 
 # S3 버킷 생성
 echo "S3 버킷 생성 중..."
-aws s3 mb s3://$BUCKET_NAME --region $AWS_REGION
+aws s3 mb s3://$BUCKET_NAME --region $AWS_REGION --no-cli-pager
 
 # S3 버킷 버전 관리 활성화
 aws s3api put-bucket-versioning \
     --bucket $BUCKET_NAME \
-    --versioning-configuration Status=Enabled
+    --versioning-configuration Status=Enabled \
+    --no-cli-pager
 
 # S3 버킷 암호화 설정
 aws s3api put-bucket-encryption \
@@ -39,13 +40,15 @@ aws s3api put-bucket-encryption \
                 }
             }
         ]
-    }'
+    }' \
+    --no-cli-pager
 
 # S3 버킷 퍼블릭 액세스 차단
 aws s3api put-public-access-block \
     --bucket $BUCKET_NAME \
     --public-access-block-configuration \
-    BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+    BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true \
+    --no-cli-pager
 
 # DynamoDB 테이블 생성
 echo "DynamoDB 테이블 생성 중..."
@@ -54,11 +57,12 @@ aws dynamodb create-table \
     --attribute-definitions AttributeName=LockID,AttributeType=S \
     --key-schema AttributeName=LockID,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
-    --region $AWS_REGION
+    --region $AWS_REGION \
+    --no-cli-pager
 
 # 테이블 생성 대기
 echo "DynamoDB 테이블 생성 대기 중..."
-aws dynamodb wait table-exists --table-name $DYNAMODB_TABLE --region $AWS_REGION
+aws dynamodb wait table-exists --table-name $DYNAMODB_TABLE --region $AWS_REGION --no-cli-pager
 
 echo "✅ 백엔드 자동 생성 완료!"
 echo ""
